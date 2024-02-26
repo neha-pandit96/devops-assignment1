@@ -1,0 +1,23 @@
+deploy:
+  runs-on: ubuntu-latest
+
+  needs: build
+
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+
+    - name: Install Firebase CLI
+      run: npm install -g firebase-tools
+
+    - name: Deploy to Firebase
+      run: |
+        export FIREBASE_CLI_EXPERIMENTS=webframeworks
+        firebase deploy --token "$FIREBASE_TOKEN"
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
